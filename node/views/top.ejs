@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Todos</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+  <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 <body>
   <div class="container">
@@ -14,7 +15,7 @@
           <h2 class="title">
             My Todo list
           </h2>
-          <form action="/create" method="post">
+          <form action="/todo" method="post">
             <input
               class="input"
               type="text"
@@ -22,15 +23,51 @@
               placeholder="Text input"
             >
           </form>
-          <progress class="progress" value="15" max="100">15%</progress>
+          <progress
+            class="progress"
+            value="<%= rows.filter(row => row.completed).length %>"
+            max="<%= rows.length %>"
+          >15%</progress>
         </section>
         <div class='list'>
           <ul>
             <% rows.forEach(row => { %>
               <div class='list-item'> 
                 <li>
-                  <%= row.id %> <%= row.text %>
-                  <a class="delete"></a>
+                  <div
+                    class="is-inline"
+                  >
+                    <label class="checkbox">
+                      <input
+                        type="checkbox"
+                        disabled
+                        <%= row.completed ? "checked" : "" %>
+                      >
+                    </label>
+                    <form
+                      action="/todo/<%= row.id %>"
+                      method="post"
+                      class="is-inline"
+                    >
+                      <input type="hidden" name="_method" value="PUT">
+                      <input type="hidden" name="completed" value="<%= row.completed %>">
+                      <button
+                        class="no-button <%= row.completed ? "line-through" : "" %>"
+                        type="submit"
+                      >
+                        <%= row.id %> <%= row.text %>
+                      </button>
+                    </form>
+                  </div>
+                  
+                  <form
+                    action="/todo/<%= row.id %>"
+                    method="post"
+                    class="is-inline"
+                  >
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button class="delete"></button>
+                  </form>
                 </li>
               </div>
             <% }) %>

@@ -5,9 +5,9 @@ const db = new sqlite3.Database('sample.sqlite3')
 
 db.serialize(function() {
   db.run('DROP TABLE IF EXISTS todos;');
-  db.run('CREATE TABLE todos(id INTEGER PRIMARY KEY AUTOINCREMENT, text TEXT);');
+  db.run('CREATE TABLE todos(id INTEGER PRIMARY KEY AUTOINCREMENT, text TEXT, completed INTEGER);');
 
-    var stmt = db.prepare('INSERT INTO todos (text) VALUES (?)')
+    var stmt = db.prepare('INSERT INTO todos (text, completed) VALUES (?, 0)')
 
     const todos = [
       "洗濯物（サンプル）",
