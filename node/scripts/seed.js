@@ -8,11 +8,16 @@ db.serialize(function() {
   db.run('CREATE TABLE todos(id INTEGER PRIMARY KEY AUTOINCREMENT, text TEXT);');
 
     var stmt = db.prepare('INSERT INTO todos (text) VALUES (?)')
-    // insert into user2(name) values('Harada');
 
-    for (var i = 0; i < 10; i++) {
-      stmt.run('本文' + i)
-    }
+    const todos = [
+      "洗濯物（サンプル）",
+      "食器洗い（サンプル）",
+      "プログラミング（サンプル）",
+    ];
+
+    todos.forEach(todo => {
+      stmt.run(todo)
+    });
 
     stmt.finalize()
 })

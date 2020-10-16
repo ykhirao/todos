@@ -1,17 +1,6 @@
 const sqlite3 = require('sqlite3').verbose()
 const db = new sqlite3.Database('sample.sqlite3')
 
-exports.rootAccessControl = (req, res) => {
-   console.log("Access root node.")
-   let weekArray = ["日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日"]
-   let param = {
-       title: "EJSサンプルページ",
-       description: "EJSを使用したサンプルページです",
-       week: weekArray
-   }
-   res.render("index", param)
-}
-
 exports.index = async (req, res) => {
   console.log('Get index')
   db.serialize(function() {
@@ -23,7 +12,18 @@ exports.index = async (req, res) => {
 }
 
 exports.create = (req, res) => {
-  console.log('Get create')
+  console.log('Post create')
+  const todo = req.body.todo.trim();
+
+  if (todo !== "") {
+    db.serialize(function() {
+      var stmt = db.prepare('INSERT INTO todos (text) VALUES (?)')
+      stmt.run(todo)
+      stmt.finalize()
+    })
+  }
+
+  res.redirect("/")
 }
 
 exports.store = (req, res) => {
