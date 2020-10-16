@@ -6,6 +6,10 @@
   <title>Document</title>
 </head>
 <body>
-  test
+  <ul style="list-style-type: lower-roman;">
+    <% rows.forEach(row => { %>
+        <li> <%= row.id %> <%= row.text %></li>
+    <% }) %>
+</ul>
 </body>
 </html>
