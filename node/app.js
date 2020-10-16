@@ -26,13 +26,11 @@ router.route('/')
 
 router.route('/todo')
   .post(function (req, res, next) {
-    console.log('Post create')
     const todo = req.body.todo;
-    console.log(todo)
 
     if (typeof todo === "string" && todo !== "") {
       db.serialize(function() {
-        const stmt = db.prepare('INSERT INTO todos (text) VALUES (?)')
+        const stmt = db.prepare('INSERT INTO todos (text, completed) VALUES (?, 0)')
         stmt.run(todo)
         stmt.finalize()
       })
