@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const port = process.env.PORT || 3000
 const app = express()
 const methodOverride = require('method-override')
+const favicon = require('serve-favicon')
+const path = require('path')
 const sqlite3 = require('sqlite3').verbose()
 const db = new sqlite3.Database('data.sqlite3')
 const fs = require('fs')
@@ -49,19 +51,7 @@ router.route('/todo')
     res.redirect("/")
   })
 
-router
-  .route('/todo/:todo_id')
-  // .get(function (req, res, next) {
-  //   db.serialize(function() {
-  //     const stmt = db.prepare('SELECT id, text, completed FROM todos WHERE id = (?)')
-
-  //     stmt.get(req.todo.id, (err, row) => {
-  //       if (err) res.send("エラーが発生しました")
-  //       console.log(row)
-  //       stmt.finalize()
-  //     })
-  //   })
-  // })
+router.route('/todo/:todo_id')
   .put(function (req, res, next) {
     if (["0", "1"].includes(req.body.completed)) {
       db.serialize(function() {
@@ -83,7 +73,35 @@ router
     res.redirect("/")
   })
 
+router.route('/todo/:todo_id/edit')
+  .get(function (req, res, next) {
+    db.serialize(function() {
+      const stmt = db.prepare('SELECT id, text, completed FROM todos WHERE id = (?)')
+
+      stmt.get(req.todo.id, (err, row) => {
+        if (err) res.send("エラーが発生しました")
+        stmt.finalize()
+      })
+    })
+    res.send("a")
+  })
+  .put(function (req, res, next) {
+    // textを編集する
+    if (["0", "1"].includes(req.body.completed)) {
+      db.serialize(function() {
+        const stmt = db.prepare('UPDATE todos SET completed = (?) WHERE id = (?)')
+        stmt.run(!Number(req.body.completed), req.todo.id)
+        stmt.finalize()
+      })
+    }
+
+    res.redirect("/")
+  })
+
 app.set("view engine", "ejs");
+// app.use(favicon())
+console.log(path.join(__dirname, '/public/images/favicon.ico'));
+app.use(favicon(path.join(__dirname, '/public/images/favicon.ico')))
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(methodOverride('X-HTTP-Method-Override'))

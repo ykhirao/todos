@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -37,29 +37,28 @@
                   <div
                     class="is-inline"
                   >
-                    <label class="checkbox">
-                      <input
-                        type="checkbox"
-                        disabled
-                        <%= row.completed ? "checked" : "" %>
-                      >
-                    </label>
                     <form
                       action="/todo/<%= row.id %>"
                       method="post"
                       class="is-inline"
                     >
-                      <input type="hidden" name="_method" value="PUT">
-                      <input type="hidden" name="completed" value="<%= row.completed %>">
                       <button
-                        class="no-button <%= row.completed ? "line-through" : "" %>"
+                        class="no-button"
                         type="submit"
                       >
-                        <%= row.id %> <%= row.text %>
+                        ✔
+                        <input type="hidden" name="_method" value="PUT">
+                        <input type="hidden" name="completed" value="<%= row.completed %>">
                       </button>
                     </form>
+                    <a
+                      class="no-button <%= row.completed ? "line-through" : "" %>"
+                      href="/todo/<%= row.id %>/edit"
+                      type="submit"
+                    >
+                      <%= row.text %>
+                    </a>
                   </div>
-                  
                   <form
                     action="/todo/<%= row.id %>"
                     method="post"
