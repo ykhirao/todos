@@ -17,6 +17,7 @@
           </h2>
           <span>
             編集前: <%= row.text %>
+             <%= row.created_at %>
           </span>
           <form action="/todo/<%= row.id %>/edit" method="post">
             <input
