@@ -1,9 +1,10 @@
 
 
 const sqlite3 = require('sqlite3').verbose()
-const db = new sqlite3.Database('sample.sqlite3')
+const db = new sqlite3.Database('data.sqlite3')
 
 db.serialize(function() {
+  console.log("SEED is run!")
   db.run('DROP TABLE IF EXISTS todos;');
   db.run('CREATE TABLE todos(id INTEGER PRIMARY KEY AUTOINCREMENT, text TEXT, completed INTEGER);');
 

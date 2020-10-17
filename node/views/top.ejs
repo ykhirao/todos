@@ -25,8 +25,8 @@
           </form>
           <progress
             class="progress"
-            value="<%= rows.filter(row => row.completed).length %>"
-            max="<%= rows.length %>"
+            value="<%= rows ? rows.filter(row => row.completed).length : '0' %>"
+            max="<%= rows ? rows.length : '0' %>"
           >15%</progress>
         </section>
         <div class='list'>

@@ -4,7 +4,13 @@ const port = 3000
 const app = express()
 const methodOverride = require('method-override')
 const sqlite3 = require('sqlite3').verbose()
-const db = new sqlite3.Database('sample.sqlite3')
+const db = new sqlite3.Database('data.sqlite3')
+const fs = require('fs')
+
+if (!fs.existsSync('data.sqlite3')) {
+  // データベースが存在しないとき
+  require('./scripts/seed.js')
+}
 
 const router = express.Router()
 router.param('todo_id', function (req, res, next, id) {
@@ -18,7 +24,11 @@ router.route('/')
   .get(function (req, res, next) {
     db.serialize(function() {
       db.all('SELECT id, text, completed FROM todos', (err, rows) => {
-        if (err) res.send("エラー発生")
+        if (err) {
+          // console.log(err)
+          // とりあえずエラーは握りつぶす
+          rows = []
+        }
         res.render("top", { rows })
       });
     })
