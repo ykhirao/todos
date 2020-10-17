@@ -8,6 +8,7 @@ const path = require('path')
 const sqlite3 = require('sqlite3').verbose()
 const db = new sqlite3.Database('data.sqlite3')
 const fs = require('fs')
+const helmet = require('helmet')
 
 if (!fs.existsSync('data.sqlite3')) {
   // データベースが存在しないとき
@@ -102,10 +103,10 @@ router.route('/todo/:todo_id/edit')
   })
 
 app.set("view engine", "ejs");
-console.log(path.join(__dirname, '/public/images/favicon.ico'));
 app.use(favicon(path.join(__dirname, '/public/images/favicon.ico')))
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
+app.use(helmet())
 app.use(methodOverride('X-HTTP-Method-Override'))
 app.use(methodOverride(function (req, res) {
   if (req.body && typeof req.body === 'object' && '_method' in req.body) {
