@@ -27,4 +27,3 @@ coverage
 benchmarks/graphs
 
 # Heroku
-data.sqlite3
