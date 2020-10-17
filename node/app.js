@@ -81,25 +81,27 @@ router.route('/todo/:todo_id/edit')
       stmt.get(req.todo.id, (err, row) => {
         if (err) res.send("エラーが発生しました")
         stmt.finalize()
+        res.render("edit", { row })
       })
     })
-    res.send("a")
   })
   .put(function (req, res, next) {
     // textを編集する
-    if (["0", "1"].includes(req.body.completed)) {
+    const todo = req.body.todo;
+    const id = req.todo.id;
+
+    if (typeof todo === "string" && todo !== "") {
       db.serialize(function() {
-        const stmt = db.prepare('UPDATE todos SET completed = (?) WHERE id = (?)')
-        stmt.run(!Number(req.body.completed), req.todo.id)
+        const stmt = db.prepare('UPDATE todos SET text = (?) WHERE id = (?)')
+        stmt.run(todo, id)
         stmt.finalize()
       })
     }
 
-    res.redirect("/")
+    res.redirect(`/todo/${id}/edit`)
   })
 
 app.set("view engine", "ejs");
-// app.use(favicon())
 console.log(path.join(__dirname, '/public/images/favicon.ico'));
 app.use(favicon(path.join(__dirname, '/public/images/favicon.ico')))
 app.use(bodyParser.urlencoded({ extended: true }));
