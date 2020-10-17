@@ -18,4 +18,7 @@ arcane-headland-1XXXX
 $ heroku git:remote --app arcane-headland-16009
 set git remote heroku to https://git.heroku.com/arcane-headland-16009.git
 
+# 特定のディレクトリをherokuにpushする
+$ git subtree push --prefix node heroku master
+
 ```
